@@ -1,5 +1,6 @@
+import * as Joi from 'joi';
+
 import { ConfigModule } from '@nestjs/config';
-import Joi from 'joi';
 import { Module } from '@nestjs/common';
 import { PersonModule } from './person/person.module';
 import { ReaderService } from './reader/reader.service';

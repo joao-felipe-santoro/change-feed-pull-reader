@@ -17,7 +17,7 @@ export class ReaderService {
     });
     while (feed.hasMoreResults) {
       const response: ChangeFeedResponse<Person[]> = await feed.fetchNext();
-      if (response.count === 0) {
+      if (response.statusCode === HttpStatus.NOT_MODIFIED) {
         console.log('NO CHANGE ');
         break;
       } else

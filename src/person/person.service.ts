@@ -1,6 +1,7 @@
 import { Container, SqlQuerySpec } from '@azure/cosmos';
 
 import { CreatePersonDto } from './dto/create-person.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Helper } from '../utils/helper';
 import { Injectable } from '@nestjs/common';
 import { Person } from './entities/person.entity';
@@ -10,7 +11,7 @@ import { UpdatePersonDto } from './dto/update-person.dto';
 export class PersonService {
   private container: Container = null;
 
-  constructor() {
+  constructor(private eventEmitter: EventEmitter2) {
     this.container = Helper.getConteiner();
   }
 
@@ -18,11 +19,12 @@ export class PersonService {
     const response = await this.container.items.create(
       new Person(createPersonDto.name, createPersonDto.age),
     );
-
+    this.eventEmitter.emitAsync('change-feed-listen', response.resource.id);
     return response.resource;
   }
 
   async update(id: string, updatePersonDto: UpdatePersonDto): Promise<Person> {
+    this.eventEmitter.emitAsync('change-feed-listen', id);
     const response = await this.container.items.upsert<Person>(
       new Person(updatePersonDto.name, updatePersonDto.age, id),
     );

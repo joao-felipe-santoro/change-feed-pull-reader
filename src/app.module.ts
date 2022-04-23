@@ -1,9 +1,9 @@
 import * as Joi from 'joi';
 
+import { ChangeFeedListener } from './listeners/change-feed.listener';
 import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { PersonModule } from './person/person.module';
-import { ReaderService } from './reader/reader.service';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
@@ -19,6 +19,6 @@ import { ScheduleModule } from '@nestjs/schedule';
     ScheduleModule.forRoot(),
     PersonModule,
   ],
-  providers: [ReaderService],
+  providers: [ChangeFeedListener],
 })
 export class AppModule {}
